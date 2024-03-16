@@ -1,6 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
+
 function Login() {
+    const[user,setUser] = useState({
+        email:'',
+        password:''
+    })
+
+    // input handler
+    const readValue = (e) =>{
+        const{name,value} = e.target
+        console.log('name=',name, 'value=',value)
+        setUser({...user , [name]:value})
+    }
+
+    // submitHandler
+    const submitHandler = async (e) => {
+        try {
+            e.preventDefault()
+            console.log(`user = `,user)
+        } catch(err) {
+            toast.error(err.message)
+        }
+    }
+
   return (
     <section id="hero" className='d-flex align-items-center justify-content-center'>
     <div className="container">
@@ -13,14 +37,15 @@ function Login() {
                 </div>
                 <div className="card">
                     <div className="card-body">
-                        <form autoComplete='off'>
+                        <form autoComplete='off' onSubmit={submitHandler}>
                             <div className="form-group mt-2">
                                 <label htmlFor="email">Email</label>
-                                <input type="email" id='email' className='form-control' required />
+                                <input type="email" name='email' id='email' value={user.email} onChange={readValue}  className='form-control' required />
                             </div>
                             <div className="form-group mt-2">
                                 <label htmlFor="paassword">Password</label>
-                                <input type="paassword" name='paassword' id='paassword' className='form-control' required />
+                                <input type="password" name='password' id='password'
+                                value={user.password} onChange={readValue} className='form-control' required />
                             </div>
                             <div className="form-group mt-2">
                                 <input type="submit" value='Login' className='btn btn-primary' required />
