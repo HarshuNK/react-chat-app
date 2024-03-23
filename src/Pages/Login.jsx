@@ -1,6 +1,8 @@
+import { signInWithEmailAndPassword } from 'firebase/auth'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { auth } from '../fireConfig'
 
 function Login() {
     const[user,setUser] = useState({
@@ -8,10 +10,12 @@ function Login() {
         password:''
     })
 
+    const navigate = useNavigate()  // to redirect any path
+
     // input handler
     const readValue = (e) =>{
         const{name,value} = e.target
-        console.log('name=',name, 'value=',value)
+        // console.log('name=',name, 'value=',value)
         setUser({...user , [name]:value})
     }
 
@@ -19,7 +23,10 @@ function Login() {
     const submitHandler = async (e) => {
         try {
             e.preventDefault()
-            console.log(`user = `,user)
+            // console.log(`user = `,user)
+        await signInWithEmailAndPassword(auth,user.email,user.password)
+        toast.success('login successfully')
+        navigate(`/`)
         } catch(err) {
             toast.error(err.message)
         }
